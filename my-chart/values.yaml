@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: nickhaimov/my-docker-app
+  pullPolicy: IfNotPresent
+  tag: "v3"
+
+service:
+  type: ClusterIP
+  port: 80

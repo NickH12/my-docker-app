@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    container_name: dockerapp
+    ports:
+      - "8080:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    
+volumes:
+   redis-data:

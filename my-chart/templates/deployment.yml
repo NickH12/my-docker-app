@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: IfNotPresent
+
+        env:
+        - name: WELCOME_MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: myapp-config
+              key: WELCOME_MESSAGE
+        
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: myapp-config
+              key: REDIS_HOST
+        
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: API_KEY
+
+
+
+        
+
