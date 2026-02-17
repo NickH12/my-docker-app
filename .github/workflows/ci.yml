@@ -1,35 +1,28 @@
-name: Debug Auth
+name: Build and Push Docker Image
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  debug-secrets:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check Secrets
-        run: |
-          echo "--------------------------------------"
-          echo "USERNAME SECRET STATUS:"
-          if [ -z "${{ secrets.DOCKER_USERNAME }}" ]; then
-            echo "❌ CRITICAL: DOCKER_USERNAME is EMPTY! Check the name in GitHub Settings."
-          else
-            echo "✅ DOCKER_USERNAME found (Length: ${#MY_USER})"
-            echo "   Value: ${{ secrets.DOCKER_USERNAME }}" 
-          fi
-          
-          echo "PASSWORD SECRET STATUS:"
-          if [ -z "${{ secrets.DOCKER_PASSWORD }}" ]; then
-            echo "❌ CRITICAL: DOCKER_PASSWORD is EMPTY! Check the name in GitHub Settings."
-          else
-            echo "✅ DOCKER_PASSWORD found (Length: ${#MY_PASS})"
-          fi
-          echo "--------------------------------------"
-        env:
-          MY_USER: ${{ secrets.DOCKER_USERNAME }}
-          MY_PASS: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Try Login
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: nickhaimov
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: nickhaimov/my-docker-app:latest,nickhaimov/my-docker-app:v${{ github.run_number }}
