@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: myapp-config
 data:
-  WELCOME_MESSAGE: "Using Kubernetes ConfigMap File!"
+  WELCOME_MESSAGE: "I AM A WIZARD OF KUBERNETES"
   REDIS_HOST: "redis"
