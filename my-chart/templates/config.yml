@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: myapp-config
+  namespace: default
 data:
   WELCOME_MESSAGE: "I AM A WIZARD OF KUBERNETES"
   REDIS_HOST: "redis"
