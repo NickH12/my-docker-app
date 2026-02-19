@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: python-app-ingress
+  namespace: default
+spec:
+  rules:
+  - host: app.35.252.24.207.sslip.io  # <--- Use 'app' instead of 'argo' here
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: myapp-service        # <--- Make sure this matches your service name!
+            port:
+              number: 80               # <--- Make sure this matches your service port (usually 80 or 5000)
